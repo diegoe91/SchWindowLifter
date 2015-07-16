@@ -3,11 +3,11 @@
 /*============================================================================*/
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*
-* C Include:        %template.h%
+* C Include:        UpFunction.h
 * Instance:         RPL_1
-* %version:         1 %
-* %created_by:      uid02495 %
-* %date_created:    Fri Feb 28 13:41:01 2003 %
+* version:         1 
+* created_by:      uid02495 
+* date_created:    Thursday Jul 16 09:30:00 2015 
 *=============================================================================*/
 /* DESCRIPTION : Header file template                                         */
 /*============================================================================*/
@@ -23,12 +23,12 @@
 /* Integration under Continuus CM                                             */
 /*============================================================================*/
 
-#ifndef TEMPLATE_H                               /* To avoid double inclusion */
-#define TEMPLATE_H
+#ifndef _UPFUNCTION_H                               /* To avoid double inclusion */
+#define _UPFUNCTION_H
 
 /* Includes */
 /* -------- */
-
+#include "typedefs.h"
 
 /* Exported types and constants */
 /* ---------------------------- */
@@ -71,6 +71,10 @@
 
 /* Functions prototypes */
 
+void Window_LedBar_Close (T_SBYTE lsb_PositionLedbar);
+extern T_UBYTE Window_Manual_Closing(void);
+extern T_UBYTE Window_Auto_Closing(void);
+extern void Ms_Counter(void);
 
 /* Functions macros */
 

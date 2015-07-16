@@ -157,7 +157,7 @@ void vfnGPIO_Init_channel(uint8_t channel, uint8_t input_output, uint8_t Open_dr
 
 void vfnGPIO_LED_Init(void)
 {
-T_SBYTE lsb_PositionLedbar=0; 		/* variable that controls the bar led */
+T_SBYTE lsb_PortAinit=0; 		/* variable that controls the bar led */
 
     /* Data Port E initialization */
 	vfnGPIO_Init_channel(LED1,GPIO_OUTPUT,GPIO_OPEN_DRAIN_ENABLE);  /* PE4 --> LED1*/
@@ -169,20 +169,20 @@ T_SBYTE lsb_PositionLedbar=0; 		/* variable that controls the bar led */
 	vfnGPIO_Init_channel(LED4,GPIO_OUTPUT,GPIO_OPEN_DRAIN_ENABLE);  /* PE7 --> LED4*/
 	vfnGPIO_Output (LED4, 1);
 	
-	vfnGPIO_Init_channel(WINDOW_UP,GPIO_INPUT,GPIO_OPEN_DRAIN_DISABLE); /* PE0 --> Window up */
-	vfnGPIO_Init_channel(WINDOW_DOWN,GPIO_INPUT,GPIO_OPEN_DRAIN_DISABLE); /* PE1 --> window down */
-	vfnGPIO_Init_channel(ANTI_PINCH_BUTTON,GPIO_INPUT,GPIO_OPEN_DRAIN_DISABLE); /* PE3 --> anti pinch */
+	vfnGPIO_Init_channel(BUTTON2,GPIO_INPUT,GPIO_OPEN_DRAIN_DISABLE); /* PE0 --> Window up */
+	vfnGPIO_Init_channel(BUTTON3,GPIO_INPUT,GPIO_OPEN_DRAIN_DISABLE); /* PE1 --> window down */
+	vfnGPIO_Init_channel(BUTTON4,GPIO_INPUT,GPIO_OPEN_DRAIN_DISABLE); /* PE3 --> anti pinch */
 	
 	/* Data Port A initialization */
-	vfnGPIO_Init_channel(LED_BLUE,GPIO_OUTPUT,GPIO_OPEN_DRAIN_DISABLE);  /* PE6 --> LED5*/
-	vfnGPIO_Output (LED_BLUE, 0);
-	vfnGPIO_Init_channel(LED_GREEN,GPIO_OUTPUT,GPIO_OPEN_DRAIN_DISABLE);  /* PE7 --> LED6*/
-	vfnGPIO_Output (LED_GREEN, 0);
+	vfnGPIO_Init_channel(PORTA10,GPIO_OUTPUT,GPIO_OPEN_DRAIN_DISABLE);  /* PE6 --> LED5*/
+	vfnGPIO_Output (PORTA10, 0);
+	vfnGPIO_Init_channel(PORTA11,GPIO_OUTPUT,GPIO_OPEN_DRAIN_DISABLE);  /* PE7 --> LED6*/
+	vfnGPIO_Output (PORTA11, 0);
 	
-    for(lsb_PositionLedbar=0; lsb_PositionLedbar<10; lsb_PositionLedbar++)  /* PA0 - PA9 --> Bar led */
+    for(lsb_PortAinit=0; lsb_PortAinit<10; lsb_PortAinit++)  /* PA0 - PA9 --> Bar led */
     {
-    	vfnGPIO_Init_channel(lsb_PositionLedbar,GPIO_OUTPUT,GPIO_OPEN_DRAIN_DISABLE);  
-        vfnGPIO_Output (lsb_PositionLedbar, 1);
+    	vfnGPIO_Init_channel(lsb_PortAinit,GPIO_OUTPUT,GPIO_OPEN_DRAIN_DISABLE);  
+        vfnGPIO_Output (lsb_PortAinit, 1);
     }
 }
 
