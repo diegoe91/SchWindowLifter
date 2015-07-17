@@ -108,3 +108,74 @@
  *  Critical/explanation :    [yes / No]
  **************************************************************/
 
+
+/**************************************************************
+ *  Name                 : opening_func
+ *  Description          : Fuction emulates opening window by turning off leds
+ *  Parameters           :  None
+ *  Return               :   None
+ *  Critical/explanation :     No
+ **************************************************************/
+
+
+
+void opening_func ()  /*Fuction emulates opening window by turning off leds*/
+{
+	
+	LED_OFF (rsb_PositionLedbar);
+	rsb_PositionLedbar--;
+	ruw_Pace_Counter=Pace_Restart;
+	
+}
+
+
+
+
+T_SBYTE MANUAL_OPEN_Func()
+{
+	if (BUTTON_DOWN_PRESSED==PRESSED )
+        {
+	        if ((ruw_Pace_Counter>Pace_Count400)&&(rsb_PositionLedbar>=Leds_Count0))
+			{
+				opening_func();
+			}
+	        else ruw_Pace_Counter++;
+        }
+        if (BUTTON_DOWN_PRESSED==NO_PRESSED)
+        {
+        	rub_State = IDLE;
+        	rsb_PositionLedbar++;
+        }
+        return(rsb_PositionLedbar);
+}
+
+
+T_SBYTE AUTO_OPEN_Func()
+{
+		if ((BUTTON_DOWN_PRESSED==NO_PRESSED)&&(ruw_Time_Counter<Time_Count500))
+				{
+					
+					if (ruw_Pace_Counter>Pace_Count400)
+					{
+					opening_func();
+					}
+					else ruw_Pace_Counter++;
+					rub_State=WINDOWAUTO_OPENING;
+				}
+	if(BUTTON_DOWN_PRESSED==PRESSED)
+	{
+		
+		ruw_Time_Counter++;
+		if ((BUTTON_DOWN_PRESSED==PRESSED ) &&(ruw_Time_Counter>Time_Count500))
+		{
+			rub_State = WINDOWMANUAL_OPENING;
+			
+		}
+	}
+		if(rsb_PositionLedbar<Leds_Count0) 
+		{
+		rub_State=IDLE;
+		rsb_PositionLedbar=Leds_Count0;
+		}
+		  return(rsb_PositionLedbar);
+}

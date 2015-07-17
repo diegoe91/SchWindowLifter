@@ -26,7 +26,7 @@
 /* Includes */
 /* -------- */
 #include "SchM_Tasks.h"
-#include "GPIO.h"
+#include "WindowLifter.h"
 
 /* Functions macros, constants, types and datas         */
 /* ---------------------------------------------------- */
@@ -121,6 +121,15 @@ void SchM_Task_1p563ms(void)
 
 void SchM_Task_3p125ms(void)
 {
+   T_UBYTE time_x3;
+   for (time_x3 =0;time_x3<3;time_x3++)
+   {
+   	STATE_MACHINE();
+   }
+   if(time_x3==3)
+   {
+   	time_x3=0;
+   }
 	
 }
 
@@ -149,7 +158,7 @@ void SchM_Task_6p25ms(void)
 
 void SchM_Task_12p5ms(void)
 {
-	LED_TOGGLE(LED4);
+	
 }
 
 /**************************************************************
@@ -163,7 +172,7 @@ void SchM_Task_12p5ms(void)
 
 void SchM_Task_25ms(void)
 {
-	LED_TOGGLE(LED3);
+
 }
 
 /**************************************************************
@@ -177,7 +186,7 @@ void SchM_Task_25ms(void)
 
 void SchM_Task_50ms(void)
 {
-	LED_TOGGLE(LED2);
+	
 }
 
 /**************************************************************
@@ -191,5 +200,5 @@ void SchM_Task_50ms(void)
 
 void SchM_Task_100ms(void)
 {
-	LED_TOGGLE(LED1);
+	
 }

@@ -71,6 +71,8 @@
 
 /* Functions prototypes */
 
+extern void IDLE_Func (void);
+
 
 /* Functions macros */
 

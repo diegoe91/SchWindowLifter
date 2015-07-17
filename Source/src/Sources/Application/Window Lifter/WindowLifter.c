@@ -57,9 +57,12 @@
 /* Definition of RAM variables                          */
 /*======================================================*/ 
 /* BYTE RAM variables */
-T_UBYTE rub_state;
+T_UBYTE rub_State=IDLE;
+T_SBYTE rsb_PositionLedbar = Leds_Count9;
 /* WORD RAM variables */
-
+T_UWORD ruw_Time_Counter=Time_Count0;
+T_UWORD ruw_Pace_Counter=Pace_Count400;
+T_UWORD x;
 /* LONG and STRUCTURE RAM variables */
 
 
@@ -108,34 +111,34 @@ T_UBYTE rub_state;
  **************************************************************/
 void STATE_MACHINE(void)
 {
-	switch (rub_state)
+	switch (rub_State)
 	{
 		case IDLE:  
-					rub_state=IDLE;
+					IDLE_Func ();
 					break;
 
 		case WINDOWMANUAL_OPENING:
-					rub_state=IDLE;
+					rsb_PositionLedbar=MANUAL_OPEN_Func();
 					break;
 		
 		case WINDOWMANUAL_CLOSING:
 					
-					rub_state=IDLE;
+					rub_State=IDLE;
 					break;
 					
 		case WINDOWAUTO_OPENING:
-					 rub_state=IDLE;
+					rsb_PositionLedbar= AUTO_OPEN_Func();
 					break;
 					
 		case WINDOWAUTO_CLOSING:
-					rub_state=IDLE;
+					rub_State=IDLE;
 					break;
 					
 		case ANTI_PINCH:
-					rub_state=IDLE;
+					rub_State=IDLE;
 					break;
 					
-		default: 	rub_state=	IDLE;
+		default: 	rub_State=	IDLE;
 					
 					break;
 	}

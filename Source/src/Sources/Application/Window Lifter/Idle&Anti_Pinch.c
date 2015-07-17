@@ -108,3 +108,34 @@
  *  Critical/explanation :    [yes / No]
  **************************************************************/
 
+void IDLE_Func ()
+{
+	
+	LED_OFF (LED_GREEN);
+	LED_OFF (LED_BLUE);
+	ruw_Pace_Counter=Pace_Count401;
+		if ((BUTTON_DOWN_PRESSED==PRESSED ) &&(rsb_PositionLedbar>=Leds_Count0)) 
+		{
+			if ((ruw_Time_Counter>Button_Validation) && (BUTTON_DOWN_PRESSED==PRESSED)) 
+			{
+				rub_State = WINDOWAUTO_OPENING;
+					LED_ON (LED_GREEN);
+			}
+			else ruw_Time_Counter++;
+		}
+		if ((BUTTON_UP_PRESSED==PRESSED ) &&(rsb_PositionLedbar<Leds_Count9)) 
+		{
+			if ((ruw_Time_Counter>Button_Validation) && (BUTTON_UP_PRESSED==PRESSED)) 
+			{
+				rub_State = WINDOWAUTO_CLOSING;
+				LED_ON (LED_BLUE);
+			}
+			else ruw_Time_Counter++;
+		}
+			
+			if ((BUTTON_DOWN_PRESSED==NO_PRESSED)&&(BUTTON_UP_PRESSED==NO_PRESSED))
+			{
+			ruw_Time_Counter=Time_Count0;
+			rub_State=IDLE;
+			}
+}

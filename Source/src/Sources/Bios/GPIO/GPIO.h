@@ -105,4 +105,16 @@ void vfnGPIO_Output(uint8_t channel, uint8_t logical_value);
 #define WINDOW_UP					66
 #define ANTI_PINCH_BUTTON			67
 
+#define BUTTON1					64
+#define BUTTON2					65
+#define BUTTON3					66
+
+#define PRESSED					1
+#define NO_PRESSED				0
+
+#define BUTTON_DOWN_PRESSED   (SIU.GPDI[BUTTON1].B.PDI)
+#define BUTTON_UP_PRESSED    (SIU.GPDI[BUTTON2].B.PDI)
+#define BUTTON_APINCH_PRESSED   (SIU.GPDI[BUTTON3].B.PDI)
+
+
 #endif

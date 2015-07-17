@@ -29,6 +29,7 @@
 /* Includes */
 /* -------- */
 #include "typedefs.h"
+#include "GPIO.h"
 
 /* Exported types and constants */
 /* ---------------------------- */
@@ -54,6 +55,18 @@
 /* Definition of RAM variables                          */
 /*======================================================*/ 
 /* BYTES */
+#define Leds_Count0 0
+#define Leds_Count10 10
+#define Leds_Count9 9
+#define Button_Validation 10
+#define Time_Count0 0
+#define Pace_Restart 0
+
+/* WORDS*/
+#define Pace_Count400 400
+#define Pace_Count401 401
+#define Time_Count500 500
+#define AntiPinch_TimeLimit 5000
 
 
 /* WORDS */
@@ -75,12 +88,21 @@ typedef enum
 /*======================================================*/ 
 /* close variable declaration sections                  */
 /*======================================================*/ 
-
+extern T_UBYTE rub_State;
+extern T_SBYTE rsb_PositionLedbar;
+/* WORD RAM variables */
+extern T_UWORD ruw_Time_Counter;
+extern T_UWORD ruw_Pace_Counter;
+extern T_UWORD x;
 /* Exported functions prototypes and macros */
 /* ---------------------------------------- */
 
 /* Functions prototypes */
 extern void STATE_MACHINE(void);
+extern void opening_func (void)  ;
+
+extern T_SBYTE MANUAL_OPEN_Func();
+extern T_SBYTE AUTO_OPEN_Func();
 
 /* Functions macros */
 
