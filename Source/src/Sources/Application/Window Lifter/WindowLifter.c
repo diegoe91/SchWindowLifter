@@ -4,10 +4,10 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*
 * C Source:         WindowLifter.c
-* Instance:         RPL_1
-* version:         1
-* created_by:      Diego Flores
-* date_created:    Wend Jul  01 11:00:00 2015 
+* Instance:         RPL_2
+* version:          1 
+* created_by:      David Rosales
+* date_created:    Wed  07/15/15 
 *=============================================================================*/
 /* DESCRIPTION : C source template file                                       */
 /*============================================================================*/
@@ -19,7 +19,7 @@
 /*============================================================================*/
 /*  REVISION |   DATE      |                               |      AUTHOR      */
 /*----------------------------------------------------------------------------*/
-/*  1.0      | 07/01/2015  |       descripcion de modulo   | Diego Flores     */
+/*  1.0      | 07/15/15    |   Matched Code and scheduler  | David Rosales    */
 /* Integration under Continuus CM                                             */
 /*============================================================================*/
 
@@ -58,11 +58,11 @@
 /*======================================================*/ 
 /* BYTE RAM variables */
 T_UBYTE rub_State=IDLE;
-T_SBYTE rsb_PositionLedbar = Leds_Count9;
+T_SBYTE rsb_PositionLedbar = WINDOW_TOTALLY_CLOSED;
 /* WORD RAM variables */
-T_UWORD ruw_Time_Counter=Time_Count0;
-T_UWORD ruw_Pace_Counter=Pace_Count400;
-T_UWORD x;
+T_UWORD ruw_Time_Counter=TIME_COUNT_RESTART;
+T_UWORD ruw_Pace_Counter=PACE_TIME_REQUIRED;
+
 /* LONG and STRUCTURE RAM variables */
 
 
@@ -114,11 +114,11 @@ void STATE_MACHINE(void)
 	switch (rub_State)
 	{
 		case IDLE:  
-					IDLE_Func ();
+					Idle_Func ();
 					break;
 
 		case WINDOWMANUAL_OPENING:
-					rsb_PositionLedbar=MANUAL_OPEN_Func();
+			    	rub_State=Manual_Open_Func();
 					break;
 		
 		case WINDOWMANUAL_CLOSING:
@@ -127,7 +127,7 @@ void STATE_MACHINE(void)
 					break;
 					
 		case WINDOWAUTO_OPENING:
-					rsb_PositionLedbar= AUTO_OPEN_Func();
+					rub_State= Auto_Open_Func();
 					break;
 					
 		case WINDOWAUTO_CLOSING:

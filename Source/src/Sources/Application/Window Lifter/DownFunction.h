@@ -4,22 +4,22 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*
 * C Include:        DownFunction.h
-* Instance:         RPL_1
+* Instance:         RPL_2
 * version:          1 
-* created_by:       uid02495 
-* date_created:     Fri Feb 28 13:41:01 2003 
+* created_by:      David Rosales
+* date_created:    Wed  07/15/15 
 *=============================================================================*/
-/* DESCRIPTION : Header file template                                         */
+/* DESCRIPTION : C source template file                                       */
 /*============================================================================*/
-/* FUNCTION COMMENT : contains only symbols which are exported to internal    */
-/* platform modules. This will not be delivered with the library              */
+/* FUNCTION COMMENT : This file describes the C source template according to  */
+/* the new software platform                                                  */
 /*                                                                            */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*  REVISION |   DATE      |                               |      AUTHOR      */
 /*----------------------------------------------------------------------------*/
-/*  1.0      | DD/MM/YYYY  | SAR/SIF/SCN_xxx               | Mr. Template     */
+/*  1.0      | 07/15/15    |   Matched Code and scheduler  | David Rosales    */
 /* Integration under Continuus CM                                             */
 /*============================================================================*/
 
@@ -28,7 +28,7 @@
 
 /* Includes */
 /* -------- */
-
+#include "typedefs.h"
 
 /* Exported types and constants */
 /* ---------------------------- */
@@ -71,7 +71,10 @@
 
 /* Functions prototypes */
 
-
+extern void Opening_Func (void);
+extern T_UBYTE Manual_Open_Func(void);
+extern T_UBYTE Auto_Open_Func(void);
+extern void Ms_Counter(void);
 /* Functions macros */
 
 

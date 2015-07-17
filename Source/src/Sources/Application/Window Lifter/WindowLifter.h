@@ -4,22 +4,22 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*
 * C Include:        WindowLifter.h
-* Instance:         RPL_1
-* version:         1 
-* created_by:      Diego Flores
-* date_created:    Wendsday July 01 10:55:01 2015 
+* Instance:         RPL_2
+* version:          1 
+* created_by:      David Rosales
+* date_created:    Wed  07/15/15 
 *=============================================================================*/
-/* DESCRIPTION : Header file template                                         */
+/* DESCRIPTION : C source template file                                       */
 /*============================================================================*/
-/* FUNCTION COMMENT : contains only symbols which are exported to internal    */
-/* platform modules. This will not be delivered with the library              */
+/* FUNCTION COMMENT : This file describes the C source template according to  */
+/* the new software platform                                                  */
 /*                                                                            */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*  REVISION |   DATE      |                               |      AUTHOR      */
 /*----------------------------------------------------------------------------*/
-/*  1.0      | 16/07/2015  | SAR/SIF/SCN_xxx               | Diego Flores     */
+/*  1.0      | 07/15/15    |   Matched Code and scheduler  | David Rosales    */
 /* Integration under Continuus CM                                             */
 /*============================================================================*/
 
@@ -55,18 +55,18 @@
 /* Definition of RAM variables                          */
 /*======================================================*/ 
 /* BYTES */
-#define Leds_Count0 0
-#define Leds_Count10 10
-#define Leds_Count9 9
-#define Button_Validation 10
-#define Time_Count0 0
-#define Pace_Restart 0
+#define WINDOW_TOTALLY_OPEN 0
+#define WINDOW_TOTALLY_CLOSED 9
+#define WINDOW_TOTALLY_OVERCLOSED 10
+#define DEBOUNCED_TIME 3
+#define TIME_COUNT_RESTART 0
+#define PACE_RESTART 0
 
 /* WORDS*/
-#define Pace_Count400 400
-#define Pace_Count401 401
-#define Time_Count500 500
-#define AntiPinch_TimeLimit 5000
+#define PACE_TIME_REQUIRED 4
+
+#define BUTTON_TIME_500MS 5
+
 
 
 /* WORDS */
@@ -93,16 +93,12 @@ extern T_SBYTE rsb_PositionLedbar;
 /* WORD RAM variables */
 extern T_UWORD ruw_Time_Counter;
 extern T_UWORD ruw_Pace_Counter;
-extern T_UWORD x;
 /* Exported functions prototypes and macros */
 /* ---------------------------------------- */
 
 /* Functions prototypes */
 extern void STATE_MACHINE(void);
-extern void opening_func (void)  ;
 
-extern T_SBYTE MANUAL_OPEN_Func();
-extern T_SBYTE AUTO_OPEN_Func();
 
 /* Functions macros */
 

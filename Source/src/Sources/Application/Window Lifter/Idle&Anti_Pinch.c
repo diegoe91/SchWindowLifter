@@ -4,10 +4,10 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*
 * C Source:         Idle&Anti_Pinch.c
-* Instance:         RPL_1
+* Instance:         RPL_2
 * version:          1 
-* created_by:      
-* date_created:    Fri Jan  9 14:38:03 2004 
+* created_by:      David Rosales
+* date_created:    Wed  07/15/15 
 *=============================================================================*/
 /* DESCRIPTION : C source template file                                       */
 /*============================================================================*/
@@ -19,7 +19,7 @@
 /*============================================================================*/
 /*  REVISION |   DATE      |                               |      AUTHOR      */
 /*----------------------------------------------------------------------------*/
-/*  1.0      | DD/MM/YYYY  |                               | Mr. Template     */
+/*  1.0      | 07/15/15    |   Matched Code and scheduler  | David Rosales    */
 /* Integration under Continuus CM                                             */
 /*============================================================================*/
 
@@ -54,6 +54,7 @@
 /*======================================================*/ 
 /* BYTE RAM variables */
 
+T_UBYTE ruw_Idle_Time_Counter=TIME_COUNT_RESTART;
 
 /* WORD RAM variables */
 
@@ -108,34 +109,38 @@
  *  Critical/explanation :    [yes / No]
  **************************************************************/
 
-void IDLE_Func ()
+void Idle_Func ()
 {
 	
 	LED_OFF (LED_GREEN);
 	LED_OFF (LED_BLUE);
-	ruw_Pace_Counter=Pace_Count401;
-		if ((BUTTON_DOWN_PRESSED==PRESSED ) &&(rsb_PositionLedbar>=Leds_Count0)) 
+	ruw_Pace_Counter=PACE_TIME_REQUIRED;/*Overpasses the pace time counter to ensure the first led is turn on/off on time (0ms)*/
+		if ((BUTTON_DOWN_PRESSED==PRESSED ) &&(rsb_PositionLedbar>=WINDOW_TOTALLY_OVERCLOSED)) /*Checks if the down button is pressed and the window is  already open*/
 		{
-			if ((ruw_Time_Counter>Button_Validation) && (BUTTON_DOWN_PRESSED==PRESSED)) 
+			if ((ruw_Idle_Time_Counter>DEBOUNCED_TIME) && (BUTTON_DOWN_PRESSED==PRESSED)) /*Checks the debounce time has been met*/
 			{
-				rub_State = WINDOWAUTO_OPENING;
+				rub_State = WINDOWAUTO_OPENING; /*Sets the state machine to window open*/
 					LED_ON (LED_GREEN);
 			}
-			else ruw_Time_Counter++;
+			else ruw_Idle_Time_Counter++; /*increments conter +1ms*/
 		}
-		if ((BUTTON_UP_PRESSED==PRESSED ) &&(rsb_PositionLedbar<Leds_Count9)) 
+		if ((BUTTON_UP_PRESSED==PRESSED ) &&(rsb_PositionLedbar<WINDOW_TOTALLY_CLOSED)) /*checks window is not totally closed and if the close button is pressed*/
 		{
-			if ((ruw_Time_Counter>Button_Validation) && (BUTTON_UP_PRESSED==PRESSED)) 
+			if ((ruw_Idle_Time_Counter>DEBOUNCED_TIME) && (BUTTON_UP_PRESSED==PRESSED)) /*checks the button has been pressed more than the debounced time*/
 			{
 				rub_State = WINDOWAUTO_CLOSING;
 				LED_ON (LED_BLUE);
 			}
-			else ruw_Time_Counter++;
+			else ruw_Idle_Time_Counter++;  /*Tim counter increments 1ms*/
 		}
 			
-			if ((BUTTON_DOWN_PRESSED==NO_PRESSED)&&(BUTTON_UP_PRESSED==NO_PRESSED))
+			if ((BUTTON_DOWN_PRESSED==NO_PRESSED)&&(BUTTON_UP_PRESSED==NO_PRESSED))  /*Assures if no button is pressed, the state machines stays in IDLE*/
 			{
-			ruw_Time_Counter=Time_Count0;
+			ruw_Idle_Time_Counter=TIME_COUNT_RESTART;
 			rub_State=IDLE;
+			}
+			else
+			{
+				/*do nothing*/
 			}
 }

@@ -200,5 +200,5 @@ void SchM_Task_50ms(void)
 
 void SchM_Task_100ms(void)
 {
-	
+		Ms_Counter();
 }
