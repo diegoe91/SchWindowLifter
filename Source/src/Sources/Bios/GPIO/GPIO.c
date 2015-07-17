@@ -149,7 +149,7 @@ void vfnGPIO_Init_channel(uint8_t channel, uint8_t input_output, uint8_t Open_dr
 
 /**************************************************************
  *  Name                 :	vfnGPIO_LED_Init
- *  Description          :  Initialize GPIO port connected to LEDs and buttons
+ *  Description          :  Initialize GPIO port connected to LEDs
  *  Parameters           :  [Input, Output, Input / output]
  *  Return               :	void
  *  Critical/explanation :    [yes / No]
@@ -169,10 +169,6 @@ T_SBYTE lsb_PortAinit=0; 		/* variable that controls the bar led */
 	vfnGPIO_Init_channel(LED4,GPIO_OUTPUT,GPIO_OPEN_DRAIN_ENABLE);  /* PE7 --> LED4*/
 	vfnGPIO_Output (LED4, 1);
 	
-	vfnGPIO_Init_channel(BUTTON2,GPIO_INPUT,GPIO_OPEN_DRAIN_DISABLE); /* PE0 --> Window up */
-	vfnGPIO_Init_channel(BUTTON3,GPIO_INPUT,GPIO_OPEN_DRAIN_DISABLE); /* PE1 --> window down */
-	vfnGPIO_Init_channel(BUTTON4,GPIO_INPUT,GPIO_OPEN_DRAIN_DISABLE); /* PE3 --> anti pinch */
-	
 	/* Data Port A initialization */
 	vfnGPIO_Init_channel(PORTA10,GPIO_OUTPUT,GPIO_OPEN_DRAIN_DISABLE);  /* PE6 --> LED5*/
 	vfnGPIO_Output (PORTA10, 0);
@@ -186,3 +182,19 @@ T_SBYTE lsb_PortAinit=0; 		/* variable that controls the bar led */
     }
 }
 
+
+/**************************************************************
+ *  Name                 :	vfnGPIO_BUTTON_Init
+ *  Description          :  Initialize GPIO port connected to buttons
+ *  Parameters           :  none
+ *  Return               :	none
+ *  Critical/explanation :  no
+ **************************************************************/
+
+void vfnGPIO_BUTTON_Init(void)
+{
+	vfnGPIO_Init_channel(BUTTON1,GPIO_INPUT,GPIO_OPEN_DRAIN_DISABLE); /* PE0 --> Button1 */
+	vfnGPIO_Init_channel(BUTTON2,GPIO_INPUT,GPIO_OPEN_DRAIN_DISABLE); /* PE1 --> Button2 */
+	vfnGPIO_Init_channel(BUTTON3,GPIO_INPUT,GPIO_OPEN_DRAIN_DISABLE); /* PE2 --> Button3 */
+	vfnGPIO_Init_channel(BUTTON4,GPIO_INPUT,GPIO_OPEN_DRAIN_DISABLE); /* PE3 --> Button4 */	
+}

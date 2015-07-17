@@ -76,6 +76,7 @@
 /* Functions prototypes */
 extern void vfnGPIO_Init_channel(uint8_t channel, uint8_t input_output, uint8_t Open_drain);
 extern void vfnGPIO_LED_Init(void);
+extern void vfnGPIO_BUTTON_Init(void);
 
 void vfnGPIO_Output(uint8_t channel, uint8_t logical_value);
 

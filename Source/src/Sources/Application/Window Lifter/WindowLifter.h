@@ -80,7 +80,7 @@ typedef enum
 /* ---------------------------------------- */
 
 /* Functions prototypes */
-extern void STATE_MACHINE(void);
+extern void State_Machine(void);
 
 /* Functions macros */
 

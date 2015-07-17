@@ -109,7 +109,7 @@ T_SBYTE rsb_PositionLedbar=9; /* Variable that indicates the led bar position  *
  *  Return               :  none
  *  Critical/explanation :  no
  **************************************************************/
-void STATE_MACHINE(void)
+void State_Machine(void)
 {
 	switch (rub_state)
 	{
