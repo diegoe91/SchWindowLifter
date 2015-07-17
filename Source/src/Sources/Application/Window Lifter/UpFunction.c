@@ -5,21 +5,21 @@
 /*============================================================================*
 * C Source:         UpFunction.c
 * Instance:         RPL_1
-* version:          1
-* created_by:       uid02495 
+* version:          2
+* created_by:       Diego Flores 
 * date_created:     Fri Jan  9 14:38:03 2004 
 *=============================================================================*/
 /* DESCRIPTION : C source template file                                       */
 /*============================================================================*/
-/* FUNCTION COMMENT : This file describes the C source template according to  */
-/* the new software platform                                                  */
+/* FUNCTION COMMENT : here is the functions that close the window, manual and */
+/* automatically                                                              */
 /*                                                                            */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*  REVISION |   DATE      |                               |      AUTHOR      */
 /*----------------------------------------------------------------------------*/
-/*  1.      | 16/07/2015  |                               | Diego Flores     */
+/*  2.7      | 16/07/2015  |                               | Diego Flores     */
 /* Integration under Continuus CM                                             */
 /*============================================================================*/
 
@@ -114,7 +114,7 @@ T_UWORD ruw_counter_anti_pinch =0; 	/* Initialize the anti pinch counter */
  *  Parameters           :  T_SBYTE lsb_PositionLedbar - This is the variable that select 
  							wich led will turns on in the led bar 
  *  Return               :	none
- *  Critical/explanation :  no]
+ *  Critical/explanation :  no
  **************************************************************/
 
 void Window_LedBar_Close (T_SBYTE lsb_PositionLedbar) 

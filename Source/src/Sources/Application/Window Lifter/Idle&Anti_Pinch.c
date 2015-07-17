@@ -5,21 +5,21 @@
 /*============================================================================*
 * C Source:         Idle&Anti_Pinch.c
 * Instance:         RPL_1
-* version:          1 
-* created_by:      
-* date_created:    Fri Jan  9 14:38:03 2004 
+* version:          2 
+* created_by:       Diego Flores
+* date_created:     Fri Jan  9 14:38:03 2004 
 *=============================================================================*/
 /* DESCRIPTION : C source template file                                       */
 /*============================================================================*/
-/* FUNCTION COMMENT : This file describes the C source template according to  */
-/* the new software platform                                                  */
+/* FUNCTION COMMENT : here are the functions of the anti pinch and idle       */
+/* 							                                                  */
 /*                                                                            */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*  REVISION |   DATE      |                               |      AUTHOR      */
 /*----------------------------------------------------------------------------*/
-/*  1.0      | DD/MM/YYYY  |                               | Mr. Template     */
+/*  2.7      | 17/07/2015  |                               | Diego Flores     */
 /* Integration under Continuus CM                                             */
 /*============================================================================*/
 
@@ -34,6 +34,7 @@
 #define T_400ms				                  4
 #define OFF 				                  0
 #define ON  	     		                  1
+#define OPEN				                  0
 #define T_5s								 50
 
 /** Own headers */
@@ -51,8 +52,9 @@
 /*==================================================*/ 
 /* BYTE constants */
 T_UWORD ruw_Open_Flag =0; 			 	/* flag that checks if the window is totally open*/
-extern T_UBYTE rub_CounterOnOff_Flag;
-extern T_UWORD ruw_time_counter;
+extern T_UBYTE rub_CounterOnOff_Flag;	/* Flag to activate the counter*/
+extern T_UWORD ruw_time_counter;		/* counter that is incresing every 100 ms*/
+extern T_SBYTE rsb_PositionLedbar;      /* Variable that indicates the led bar position */
 
 /* WORD constants */
 
@@ -102,14 +104,14 @@ extern T_UWORD ruw_time_counter;
 /* Private functions */
 /* ----------------- */
 /**************************************************************
- *  Name                 :	WINDOW_LEDBAR_OPEN
+ *  Name                 :	Window_LedBar_Open
  *  Description          :  Turn off Barled's Leds 
  *  Parameters           :  T_SBYTE lsb_BarLed - It is the position of the window (Barled) 
- *  Return               :	void
- *  Critical/explanation :    [yes / No]
+ *  Return               :	none
+ *  Critical/explanation :  no
  **************************************************************/
  
-void WINDOW_LEDBAR_OPEN (T_SBYTE lsb_BarLed) /* Turn off one led of the bar led */
+void Window_LedBar_Open (T_SBYTE lsb_BarLed) /* Turn off one led in the bar led */
 {	
 	LED_OFF(lsb_BarLed);
 }
@@ -119,42 +121,62 @@ void WINDOW_LEDBAR_OPEN (T_SBYTE lsb_BarLed) /* Turn off one led of the bar led 
 
 /**************************************************************
  *  Name                 :	anti_pinch
- *  Description          :  function that controls the anti pinch button
- *  Parameters           :  [Input, Output, Input / output]
- *  Return               :  nothing
- *  Critical/explanation :    [yes / No]
+ *  Description          :  function that controls the anti pinch button 
+ *  Parameters           :  none
+ *  Return               :  none
+ *  Critical/explanation :  no
  **************************************************************/
  
 T_UBYTE Anti_Pinch(void)
 {
 	T_UBYTE lub_state=ANTI_PINCH;
-	rub_CounterOnOff_Flag=ON;
-	if((rsb_PositionLedbar > BarLed_UnderFlow) && (ruw_Open_Flag == DEACTIVATED))
+	rub_CounterOnOff_Flag=ON; /* Activate the counter */
+	if(ruw_Open_Flag == DEACTIVATED) /* checks the flag that is activated when the window is completly open */
 	{
 		LED_OFF(LED_BLUE);
 		LED_ON(LED_GREEN);
-		if(ruw_time_counter>=T_400ms)
+		if(ruw_time_counter>=T_400ms) /* checks that the time of the counter is 400ms or over */
 		{
-			WINDOW_BARLED_OPEN(rsb_PositionLedbar);
+			Window_LedBar_Open(rsb_PositionLedbar); /* sends the position of the ledbar to turn off a led*/
 			rsb_PositionLedbar--;
-			if(ruw_time_counter>=T_400ms)
+			if(ruw_time_counter>=T_400ms) /* checks that the time of the counter is 400ms or over to restart the counter */
 			{
 				ruw_time_counter=T_0ms;
 			}
+			else
+			{
+				/* Do nothing */
+			}
+		}
+		else
+		{
+			/* Do nothing */
+		}
+		if(rsb_PositionLedbar <= BarLed_UnderFlow) /* checks when the window is completely open */
+		{
+			ruw_Open_Flag = ACTIVATED; /* activate the flag that indicates that the window is now open */
+			rsb_PositionLedbar=OPEN;
+			LED_OFF(LED_GREEN);
+		}
+		else
+		{
+			/* Do nothing */
 		}
 	}
-	ruw_time_counter++;
-	if(rsb_PositionLedbar == BarLed_UnderFlow)
+	else
 	{
-		ruw_Open_Flag = ACTIVATED;
-		rsb_PositionLedbar=OPEN;
-		LED_OFF(LED_GREEN);
+		/* Do nothing */
 	}
-	if(ruw_time_counter >= T_5s)
+	ruw_time_counter++;
+	if(ruw_time_counter >= T_5s) /* waits 5 seconds of the counter to send the program to idle  */
 	{
 		lub_state=	IDLE;
 		ruw_time_counter=T_0ms;
 		ruw_Open_Flag = DEACTIVATED;
+	}
+	else
+	{
+		/* Do nothing */
 	}
 	return lub_state;
 }
