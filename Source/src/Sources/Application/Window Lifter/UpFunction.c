@@ -53,12 +53,14 @@
 /*======================================================*/ 
 /* BYTE RAM variables */
 T_UBYTE rub_ControlManual_Flag=0;			/* flag to control auto and manual mode */
-T_UBYTE rub_CounterOnOff_Flag=0;			/* flag to control counter operation */
+extern T_UBYTE rub_CounterOnOff_Flag;			/* flag to control counter operation */
 extern T_SBYTE rsb_PositionLedbar;          /* variable that turn on/off the led bar */
 T_UBYTE rub_AutoFlag=0;                     /* flag that checks the auto mode is on */
+T_UBYTE rub_flagT_0ms=0;
+T_UBYTE rub_flagT_400ms=0;
 
 /* WORD RAM variables */
-T_UWORD ruw_time_counter = 0;  		/* Initialize the main time counter */
+extern T_UWORD ruw_time_counter;  		/* main time counter */
 T_UWORD ruw_counter_anti_pinch =0; 	/* Initialize the anti pinch counter */
 
 
@@ -120,6 +122,7 @@ T_UWORD ruw_counter_anti_pinch =0; 	/* Initialize the anti pinch counter */
 void Window_LedBar_Close (T_SBYTE lsb_PositionLedbar) 
 {
 	LED_ON(lsb_PositionLedbar); /* Turns on a led in the led bar when the window is closing */
+	rsb_PositionLedbar++;
 }
 
 /* Exported functions */
@@ -137,6 +140,8 @@ T_UBYTE Window_Manual_Closing(void)
 {	
 	T_UBYTE lub_state=WINDOWMANUAL_CLOSING; /* Initializes the state that the function will return to the finite state machine
 											   to 	WINDOWMANUAL_CLOSING */
+	T_UWORD luw_time_counter_MC=Reed_Ms_Counter();
+ 	T_SBYTE lsb_PositionLedbar_MC=Reed_PositionLedbar();
 	rub_CounterOnOff_Flag=ON;				/* change the counter flag to on to start the counter */
 	if((ANTI_PINCH_PRESS == ACTIVATED) && (rsb_PositionLedbar < CLOSE)) /* checks that the anti pinch button is pressed  */
 																		/* and the Window is not totally close */
@@ -146,7 +151,8 @@ T_UBYTE Window_Manual_Closing(void)
 		{
 			lub_state=	ANTI_PINCH;				/*change the state to anti pinch */
 			rub_CounterOnOff_Flag=OFF;
-			ruw_counter_anti_pinch=T_0ms;	
+			ruw_counter_anti_pinch=T_0ms;
+			ruw_time_counter=T_0ms;	
 		}
 		else
 		{
@@ -157,13 +163,12 @@ T_UBYTE Window_Manual_Closing(void)
 	{
 		ruw_counter_anti_pinch=T_0ms;
 	}
-	if(((BUTTON_WINDOW_OPEN_PRESS == DEACTIVATED) && (BUTTON_WINDOW_CLOSE_PRESS == ACTIVATED)) && (rsb_PositionLedbar < BarLed_OverFlow)) /* checks that only the window close bottun is pressed and the window is open */
+	if((BUTTON_WINDOW_OPEN_PRESS == DEACTIVATED) && (BUTTON_WINDOW_CLOSE_PRESS == ACTIVATED) && (lsb_PositionLedbar_MC < BarLed_OverFlow)) /* checks that only the window close bottun is pressed and the window is open */
 	{	
-		if(ruw_time_counter>=T_400ms) /* checks that the counter is upper than 400ms */
+		if(luw_time_counter_MC == T_800ms) /* checks that the counter is upper than 400ms */
 		{
-			Window_LedBar_Close(rsb_PositionLedbar); /* turn on one led of the led bar */
-			rsb_PositionLedbar++;
-			ruw_time_counter=T_0ms;
+			Window_LedBar_Close(lsb_PositionLedbar_MC); /* turn on one led of the led bar */
+			ruw_time_counter=T_400ms;
 		}
 		else
 		{
@@ -172,7 +177,7 @@ T_UBYTE Window_Manual_Closing(void)
 	}
 	else /* if the window open button is not longer pressed or the window is close change the state to idle and restart values */
 	{
-		if(rsb_PositionLedbar >= BarLed_OverFlow) /* if the position of the led bar is more than 9 (his higher value) change*/
+		if(lsb_PositionLedbar_MC >= BarLed_OverFlow) /* if the position of the led bar is more than 9 (his higher value) change*/
 												  /* change his value to 9 */
 		{
 			rsb_PositionLedbar =CLOSE;
@@ -182,9 +187,11 @@ T_UBYTE Window_Manual_Closing(void)
 			/* Do nothing */
 		}
 		lub_state=	IDLE;
+		rub_CounterOnOff_Flag=OFF;
 		ruw_time_counter=T_0ms;
 		LED_OFF(LED_BLUE);
-		rub_CounterOnOff_Flag=OFF;
+		rub_flagT_0ms=DEACTIVATED;  
+		rub_flagT_400ms=DEACTIVATED;
 	}
 	return lub_state;
 }
@@ -202,16 +209,10 @@ T_UBYTE Window_Manual_Closing(void)
 T_UBYTE Window_Auto_Closing(void)
 {
 	T_UBYTE lub_state=WINDOWAUTO_CLOSING;
+	T_UWORD luw_time_counter_AC=Reed_Ms_Counter();
+ 	T_SBYTE lsb_PositionLed_AC=Reed_PositionLedbar();
 	rub_CounterOnOff_Flag=ON;
-	if(rsb_PositionLedbar<CLOSE) /* Turn on a window close indicator */
-	{
-		LED_ON(LED_BLUE);	
-	}
-	else
-	{
-		/* Do nothing */
-	}
-	if((ANTI_PINCH_PRESS == ACTIVATED) && (rsb_PositionLedbar < CLOSE)) /* checks that the anti pinch button is pressed  */
+	if((ANTI_PINCH_PRESS == ACTIVATED) && (lsb_PositionLed_AC < CLOSE)) /* checks that the anti pinch button is pressed  */
 																		/* and the Window is not totally close */
 	{
 		ruw_counter_anti_pinch++;
@@ -219,7 +220,8 @@ T_UBYTE Window_Auto_Closing(void)
 		{
 			lub_state=	ANTI_PINCH;			 /*change the state to anti pinch */
 			ruw_counter_anti_pinch=T_0ms;
-			rub_CounterOnOff_Flag=OFF;	
+			rub_CounterOnOff_Flag=OFF;
+			ruw_time_counter=T_0ms;	
 		}
 		else
 		{
@@ -230,14 +232,18 @@ T_UBYTE Window_Auto_Closing(void)
 	{
 		ruw_counter_anti_pinch=T_0ms;
 	}				
-	if((((BUTTON_WINDOW_OPEN_PRESS == DEACTIVATED) && (BUTTON_WINDOW_CLOSE_PRESS == ACTIVATED)) && (rsb_PositionLedbar < BarLed_OverFlow)) && rub_ControlManual_Flag == DEACTIVATED) /* checks that only the window close bottun is pressed and the window is open */
+	if((BUTTON_WINDOW_OPEN_PRESS == DEACTIVATED) && (BUTTON_WINDOW_CLOSE_PRESS == ACTIVATED) && (lsb_PositionLed_AC < BarLed_OverFlow) && rub_ControlManual_Flag == DEACTIVATED) /* checks that only the window close bottun is pressed and the window is open */
 	{
-		if((ruw_time_counter==T_0ms || ruw_time_counter==T_400ms)) /* checks that the counter is 0ms or 400 ms to turn on a led in the led bae */
+		if(((luw_time_counter_AC == T_0ms) && (rub_flagT_0ms==DEACTIVATED)) || ((luw_time_counter_AC == T_400ms) && (rub_flagT_400ms==ACTIVATED))) /* checks that the counter is 0ms or 400 ms to turn on a led in the led bae */
 		{
-			Window_LedBar_Close(rsb_PositionLedbar);
-			rsb_PositionLedbar++;	
+			Window_LedBar_Close(lsb_PositionLed_AC);
+	        rub_flagT_0ms=ACTIVATED;
+	        if(luw_time_counter_AC == T_400ms)  
+	        {
+	        	rub_flagT_400ms=ACTIVATED;
+	        }
 		}
-		else if(ruw_time_counter >= T_500ms) /* checks that the counter is 500ms to change the state to manual  */
+		else if(luw_time_counter_AC == T_500ms) /* checks that the counter is 500ms to change the state to manual  */
 		{
 			lub_state=	WINDOWMANUAL_CLOSING;
 		}
@@ -246,28 +252,18 @@ T_UBYTE Window_Auto_Closing(void)
 			/* Do nothing */
 		}
 	}
-	else if(rsb_PositionLedbar < BarLed_OverFlow) /* auto mode checks that the window is open */
+	else if(lsb_PositionLed_AC < BarLed_OverFlow) /* auto mode checks that the window is open */
 	{
 		rub_ControlManual_Flag = ACTIVATED;
-		if((ruw_time_counter>=T_400ms) && (rub_AutoFlag==0)) /* turn on a led in the led bar when the counter is 400ms */
+		if((ruw_time_counter==T_400ms) && (rub_AutoFlag==DEACTIVATED)) /* turn on a led in the led bar when the counter is 400ms */
 		{
-			rub_AutoFlag=1;
-			Window_LedBar_Close(rsb_PositionLedbar);
-			rsb_PositionLedbar++;
+			rub_AutoFlag=ACTIVATED;
+			Window_LedBar_Close(lsb_PositionLed_AC);
 		}
-		else if( ruw_time_counter>=T_800ms) /* turn on a led in the led bar when the counter is 800ms */
+		else if(ruw_time_counter==T_800ms) /* turn on a led in the led bar when the counter is 800ms */
 		{
-			rub_AutoFlag=1;
-			Window_LedBar_Close(rsb_PositionLedbar);
-			rsb_PositionLedbar++;
-			if(ruw_time_counter>=T_800ms) /* restart the counter to 400ms to count to 800ms to turn on a new led */
-			{
-				ruw_time_counter=T_400ms;
-			}
-			else
-			{
-				/* Do nothing */
-			}
+			Window_LedBar_Close(lsb_PositionLed_AC);
+			ruw_time_counter=T_400ms; /* restart the counter to 400ms to count to 800ms to turn on a new led */
 		}
 		else
 		{
@@ -278,14 +274,18 @@ T_UBYTE Window_Auto_Closing(void)
 	{
 		/* Do nothing */
 	}
-	if(rsb_PositionLedbar >= BarLed_OverFlow) /* when the window is close restart all values */
+	if(lsb_PositionLed_AC >= BarLed_OverFlow) /* when the window is close restart all values */
 	{
 		rub_ControlManual_Flag = DEACTIVATED;
+		rub_AutoFlag=DEACTIVATED;
 		lub_state=	IDLE;
 		rsb_PositionLedbar=CLOSE;
-		rub_CounterOnOff_Flag=ON;
+		rub_CounterOnOff_Flag=OFF;
+		ruw_time_counter=T_0ms;
 		LED_OFF(LED_BLUE);
 		rub_AutoFlag=0;
+		rub_flagT_0ms=DEACTIVATED;
+		rub_flagT_400ms=DEACTIVATED;  
 	}
 	else
 	{
@@ -293,28 +293,3 @@ T_UBYTE Window_Auto_Closing(void)
 	}
 	return lub_state;
 }
-
-/**************************************************************
- *  Name                 :	Ms_Counter
- *  Description          :  function that manage the millisecond counter 
- *  Parameters           :  none
- *  Return               :  none
- *  Critical/explanation :  no
- **************************************************************/
-
-void Ms_Counter(void)
-{
-	if(rub_CounterOnOff_Flag==ON) /* checks if the flag is on to start the counter */ 
-	{
-		ruw_time_counter++;
-	}
-	else if(rub_CounterOnOff_Flag==OFF)	/* checks if the flag is off to stop the counter */
-	{
-		ruw_time_counter=0;
-	}
-	else
-	{
-		/* Do nothing */
-	}
-}
-

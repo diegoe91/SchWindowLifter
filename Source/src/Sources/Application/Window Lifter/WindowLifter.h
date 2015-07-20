@@ -54,9 +54,16 @@
 /* Definition of RAM variables                          */
 /*======================================================*/ 
 /* BYTES */
+#define WINDOW_TOTALLY_OPEN 0
+#define WINDOW_TOTALLY_CLOSED 9
+#define WINDOW_TOTALLY_OVERCLOSED 10
+#define DEBOUNCED_TIME 3
+#define TIME_COUNT_RESTART 0
+#define PACE_RESTART 0
 
-
-/* WORDS */
+/* WORDS*/
+#define PACE_TIME_REQUIRED 4
+#define BUTTON_TIME_500MS 5
 
 
 /* LONGS and STRUCTURES */
@@ -75,13 +82,19 @@ typedef enum
 /*======================================================*/ 
 /* close variable declaration sections                  */
 /*======================================================*/ 
-
+extern T_UBYTE rub_State;
+extern T_SBYTE rsb_PositionLedbar;
+/* WORD RAM variables */
+extern T_UWORD ruw_Time_Counter;
+extern T_UWORD ruw_Pace_Counter;
 /* Exported functions prototypes and macros */
 /* ---------------------------------------- */
 
 /* Functions prototypes */
 extern void State_Machine(void);
-
+extern void Ms_Counter(void);
+extern T_UWORD Reed_Ms_Counter(void);
+extern T_SBYTE Reed_PositionLedbar(void);
 /* Functions macros */
 
 

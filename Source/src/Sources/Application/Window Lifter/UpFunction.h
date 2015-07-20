@@ -74,7 +74,7 @@
 void Window_LedBar_Close (T_SBYTE lsb_PositionLedbar);
 extern T_UBYTE Window_Manual_Closing(void);
 extern T_UBYTE Window_Auto_Closing(void);
-extern void Ms_Counter(void);
+
 
 /* Functions macros */
 

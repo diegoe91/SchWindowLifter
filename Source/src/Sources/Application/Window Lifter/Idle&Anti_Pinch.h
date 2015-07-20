@@ -73,6 +73,7 @@
 /* Functions prototypes */
 extern T_UBYTE Anti_Pinch(void);
 void Window_LedBar_Open (T_SBYTE lsb_BarLed);
+extern T_UBYTE Idle_Func (void);
 
 /* Functions macros */
 
