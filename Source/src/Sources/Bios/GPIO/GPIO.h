@@ -76,17 +76,14 @@
 /* Functions prototypes */
 extern void vfnGPIO_Init_channel(uint8_t channel, uint8_t input_output, uint8_t Open_drain);
 extern void vfnGPIO_LED_Init(void);
+extern void vfnGPIO_BUTTON_Init(void);
 
 void vfnGPIO_Output(uint8_t channel, uint8_t logical_value);
 
 /* Functions macros */
 
-/** Reed Anti pinch button*/
-#define ANTI_PINCH_ACTIVATED				(SIU.GPDI[ANTI_PINCH_BUTTON].B.PDI)
-/** Reed window close button */
-#define WINDOW_CLOSE						(SIU.GPDI[WINDOW_UP].B.PDI)
-/** Reed window open button */
-#define WINDOW_OPEN							(SIU.GPDI[WINDOW_DOWN].B.PDI)
+/** Reed button*/
+#define BOTTON_PRESS(channel)				(SIU.GPDI[channel].B.PDI)
 /** Set LED */ 
 #define LED_ON(channel)                     (SIU.GPDO[channel].B.PDO =  1)
 /** Clear LED */ 
@@ -99,10 +96,11 @@ void vfnGPIO_Output(uint8_t channel, uint8_t logical_value);
 #define LED2       					69
 #define LED3       					70
 #define LED4        				71
-#define LED_BLUE					10
-#define LED_GREEN					11
-#define WINDOW_DOWN					65
-#define WINDOW_UP					66
-#define ANTI_PINCH_BUTTON			67
+#define PORTA10						10
+#define PORTA11						11
+#define BUTTON1						64
+#define BUTTON2						65
+#define BUTTON3						66
+#define BUTTON4						67
 
 #endif

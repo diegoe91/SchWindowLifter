@@ -28,6 +28,7 @@
 
 /* Includes */
 /* -------- */
+#include "typedefs.h"
 
 
 /* Exported types and constants */
@@ -70,7 +71,8 @@
 /* ---------------------------------------- */
 
 /* Functions prototypes */
-
+extern T_UBYTE Anti_Pinch(void);
+void Window_LedBar_Open (T_SBYTE lsb_BarLed);
 
 /* Functions macros */
 

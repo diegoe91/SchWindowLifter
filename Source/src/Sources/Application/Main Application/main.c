@@ -66,7 +66,9 @@ int main(void)
 	/* Disable Watchdog */
 	disableWatchdog();
 	/*Initialize LEDs on TRK-MPC560xB board */
-	vfnGPIO_LED_Init();	
+	vfnGPIO_LED_Init();
+	/*Initialize BUTTONs on TRK-MPC560xB board */
+	vfnGPIO_BUTTON_Init();	
 	/*Initialize Interrupts */
 	INTC_InitINTCInterrupts();
 	/*Initialize Exception Handlers */

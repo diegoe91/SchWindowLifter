@@ -5,21 +5,21 @@
 /*============================================================================*
 * C Source:         WindowLifter.c
 * Instance:         RPL_1
-* version:         1
-* created_by:      Diego Flores
-* date_created:    Wend Jul  01 11:00:00 2015 
+* version:          2
+* created_by:       Diego Flores
+* date_created:    	Wend Jul  01 11:00:00 2015 
 *=============================================================================*/
 /* DESCRIPTION : C source template file                                       */
 /*============================================================================*/
-/* FUNCTION COMMENT : This file describes the C source template according to  */
-/* the new software platform                                                  */
+/* FUNCTION COMMENT : here is the finite state machine of the window lifter   */
+/*                                                                            */
 /*                                                                            */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*  REVISION |   DATE      |                               |      AUTHOR      */
 /*----------------------------------------------------------------------------*/
-/*  1.0      | 07/01/2015  |       descripcion de modulo   | Diego Flores     */
+/*  2.7      | 07/01/2015  |       descripcion de modulo   | Diego Flores     */
 /* Integration under Continuus CM                                             */
 /*============================================================================*/
 
@@ -32,6 +32,7 @@
 #include "Idle&Anti_Pinch.h"
 #include "DownFunction.h"
 #include "UpFunction.h"
+#include "typedefs.h"
 
 
 /* GPIO routines prototypes */ 
@@ -57,7 +58,9 @@
 /* Definition of RAM variables                          */
 /*======================================================*/ 
 /* BYTE RAM variables */
-T_UBYTE rub_state;
+T_UBYTE rub_state=IDLE;  /* Initialize the first state of the Window lifter finite states machine */
+T_SBYTE rsb_PositionLedbar=9; /* Variable that indicates the led bar position  */
+
 /* WORD RAM variables */
 
 /* LONG and STRUCTURE RAM variables */
@@ -102,11 +105,11 @@ T_UBYTE rub_state;
 /**************************************************************
  *  Name                 :	STATE_MACHINE
  *  Description          :  Finite State machine that controls all functions of the window lifter
- *  Parameters           :  [Input, Output, Input / output]
- *  Return               :  nothing
- *  Critical/explanation :    [yes / No]
+ *  Parameters           :  none
+ *  Return               :  none
+ *  Critical/explanation :  no
  **************************************************************/
-void STATE_MACHINE(void)
+void State_Machine(void)
 {
 	switch (rub_state)
 	{
@@ -120,7 +123,7 @@ void STATE_MACHINE(void)
 		
 		case WINDOWMANUAL_CLOSING:
 					
-					rub_state=IDLE;
+					rub_state = Window_Manual_Closing();
 					break;
 					
 		case WINDOWAUTO_OPENING:
@@ -128,11 +131,11 @@ void STATE_MACHINE(void)
 					break;
 					
 		case WINDOWAUTO_CLOSING:
-					rub_state=IDLE;
+					rub_state = Window_Auto_Closing();
 					break;
 					
 		case ANTI_PINCH:
-					rub_state=IDLE;
+					rub_state = Anti_Pinch();
 					break;
 					
 		default: 	rub_state=	IDLE;
