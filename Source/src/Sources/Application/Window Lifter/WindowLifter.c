@@ -19,7 +19,7 @@
 /*============================================================================*/
 /*  REVISION |   DATE      |                               |      AUTHOR      */
 /*----------------------------------------------------------------------------*/
-/*  2.7      | 07/01/2015  |       descripcion de modulo   | Diego Flores     */
+/*  2.15      | 21/07/2015  |       descripcion de modulo   | Diego Flores     */
 /* Integration under Continuus CM                                             */
 /*============================================================================*/
 
@@ -177,7 +177,7 @@ void Ms_Counter(void)
 
 /**************************************************************
  *  Name                 :	Reed_Ms_Counter
- *  Description          :  function that manage the millisecond counter 
+ *  Description          :  it returns the Ms_Counter value 
  *  Parameters           :  none
  *  Return               :  none
  *  Critical/explanation :  no
@@ -185,22 +185,19 @@ void Ms_Counter(void)
 
 T_UWORD Reed_Ms_Counter(void)
 {
-	T_UWORD luw_time_counter;
-	luw_time_counter=ruw_time_counter;
-	return luw_time_counter;
+	return ruw_time_counter;
 }
 
 /**************************************************************
- *  Name                 :	Reed_Ms_Counter
- *  Description          :  function that manage the millisecond counter 
+ *  Name                 :	Reed_PositionLedbar
+ *  Description          :  it returns the Position Ledbar value 
  *  Parameters           :  none
- *  Return               :  none
+ *  Return               :  rsb_PositionLedbar
  *  Critical/explanation :  no
  **************************************************************/
 
 T_SBYTE Reed_PositionLedbar(void)
 {
-	T_SBYTE lsb_PositionLedbar;
-	lsb_PositionLedbar=rsb_PositionLedbar;
-	return lsb_PositionLedbar;
+	
+	return rsb_PositionLedbar;
 }

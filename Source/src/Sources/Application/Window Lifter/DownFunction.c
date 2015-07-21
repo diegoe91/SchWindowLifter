@@ -19,7 +19,7 @@
 /*============================================================================*/
 /*  REVISION |   DATE      |                               |      AUTHOR      */
 /*----------------------------------------------------------------------------*/
-/*  1.0      | 07/15/15    |   Matched Code and scheduler  | David Rosales    */
+/*  2.15      | 21/07/15    |   Matched Code and scheduler  | Diego Flores    */
 /* Integration under Continuus CM                                             */
 /*============================================================================*/
 
@@ -56,11 +56,10 @@
 /* BYTE RAM variables */
 
 extern T_UBYTE rub_CounterOnOff_Flag;
-extern T_UWORD ruw_time_counter;
 extern T_SBYTE rsb_PositionLedbar;
 
 /* WORD RAM variables */
-
+extern T_UWORD ruw_time_counter;
 
 /* LONG and STRUCTURE RAM variables */
 
@@ -147,9 +146,9 @@ void Opening_Func (void)  /*Fuction emulates opening window by turning off leds*
 /**************************************************************
  *  Name                 : MANUAL_OPEN_Func
  *  Description          : Fuction checks if the button "down" is still pressed, if so, the window goes down while pressed
- *  Parameters           :  None
- *  Return               :   rub_State
- *  Critical/explanation :     No
+ *  Parameters           : None
+ *  Return               : lub_State_MO
+ *  Critical/explanation : No
  **************************************************************/
 
 
@@ -196,22 +195,22 @@ T_UBYTE Manual_Open_Func(void)
 /**************************************************************
  *  Name                 : Auto_Open_Func
  *  Description          : Fuction checks the button pressed time is <500ms to open the window automatically
- *  Parameters           :  None
- *  Return               :   rub_State
- *  Critical/explanation :     No
+ *  Parameters           : None
+ *  Return               : lub_State_AO
+ *  Critical/explanation : No
  **************************************************************/
 
 T_UBYTE Auto_Open_Func(void)
 {
 	T_UBYTE lub_State_AO=WINDOWAUTO_OPENING;
- 	T_UWORD luw_time_counter_AO=Reed_Ms_Counter();
- 	T_SBYTE lsb_PositionLed_AO=Reed_PositionLedbar();
+ 	T_UWORD luw_Time_Counter_AO=Reed_Ms_Counter(); /* Reeds Ms_Counter value */
+ 	T_SBYTE lsb_PositionLed_AO=Reed_PositionLedbar(); /* Reeds PositionLedbar */
  	rub_CounterOnOff_Flag=ON;
  	
 	if ((BUTTON_DOWN_PRESSED==NO_PRESSED)&&(ruw_Time_Counter<BUTTON_TIME_500MS)&&(lsb_PositionLed_AO>=WINDOW_TOTALLY_OPEN))/*checks the time has been pressed less than 500ms*/
 	{
 					
-		if (luw_time_counter_AO>=PACE_TIME_REQUIRED) /*Checks the Pace counter is 400ms to turn a led*/
+		if (luw_Time_Counter_AO>=PACE_TIME_REQUIRED) /*Checks the Pace counter is 400ms to turn a led*/
 		{
 			Opening_Func();  /*turns off leds every 400ms*/
 		}
@@ -223,7 +222,7 @@ T_UBYTE Auto_Open_Func(void)
 	}
 	else if(BUTTON_DOWN_PRESSED==PRESSED)  /*checks if the button keeps being pressed*/
 	{
-		if ((BUTTON_DOWN_PRESSED==PRESSED ) && (luw_time_counter_AO>BUTTON_TIME_500MS)) /*checks if the the button pressed time has overpassed the 500ms*/
+		if ((BUTTON_DOWN_PRESSED==PRESSED ) && (luw_Time_Counter_AO>BUTTON_TIME_500MS)) /*checks if the the button pressed time has overpassed the 500ms*/
 		{
 			lub_State_AO = WINDOWMANUAL_OPENING;  /*chenges the state machine to Manual opening*/
 			

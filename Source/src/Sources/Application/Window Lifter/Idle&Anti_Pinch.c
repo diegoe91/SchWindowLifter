@@ -19,7 +19,7 @@
 /*============================================================================*/
 /*  REVISION |   DATE      |                               |      AUTHOR      */
 /*----------------------------------------------------------------------------*/
-/*  2.7      | 17/07/2015  |                               | Diego Flores     */
+/*  2.15      | 21/07/2015  |                               | Diego Flores     */
 /* Integration under Continuus CM                                             */
 /*============================================================================*/
 
@@ -54,14 +54,13 @@
 /* Definition of RAM variables                          */
 /*======================================================*/ 
 /* BYTE RAM variables */
-T_UBYTE ruw_Idle_Time_Counter=TIME_COUNT_RESTART;
-T_UWORD ruw_Open_Flag =0; 			 	/* flag that checks if the window is totally open*/
+T_UBYTE rub_Idle_Time_Counter=TIME_COUNT_RESTART;
 extern T_UBYTE rub_CounterOnOff_Flag;	/* Flag to activate the counter*/
-extern T_UWORD ruw_time_counter;		/* counter that is incresing every 100 ms*/
 extern T_SBYTE rsb_PositionLedbar;      /* Variable that indicates the led bar position */
 
 /* WORD RAM variables */
-
+T_UWORD ruw_Open_Flag =0; 			 	/* flag that checks if the window is totally open*/
+extern T_UWORD ruw_time_counter;		/* counter that is incresing every 100 ms*/
 
 /* LONG and STRUCTURE RAM variables */
 
@@ -126,69 +125,68 @@ void Window_LedBar_Open (T_SBYTE lsb_BarLed) /* Turn off one led in the bar led 
 /* ------------------ */
 
 /**************************************************************
- *  Name                 :	export_func
- *  Description          :
- *  Parameters           :  [Input, Output, Input / output]
- *  Return               :
- *  Critical/explanation :    [yes / No]
+ *  Name                 :	Idle_func()
+ *  Description          :  its the main state where awaits for a valid press button
+ *  Parameters           :  none
+ *  Return               :	lub_State_Id
+ *  Critical/explanation :  No
  **************************************************************/
 
 T_UBYTE Idle_Func ()
 {
-	T_UBYTE lub_State=IDLE;
+	T_UBYTE lub_State_Id=IDLE;
 	LED_OFF (LED_GREEN);
 	LED_OFF (LED_BLUE);
 	ruw_Pace_Counter=PACE_TIME_REQUIRED;/*Overpasses the pace time counter to ensure the first led is turn on/off on time (0ms)*/
-		if ((BUTTON_DOWN_PRESSED==PRESSED ) &&(rsb_PositionLedbar>=WINDOW_TOTALLY_OPEN)) /*Checks if the down button is pressed and the window is  already open*/
+	if ((BUTTON_DOWN_PRESSED==PRESSED ) &&(rsb_PositionLedbar>WINDOW_TOTALLY_OPEN)) /*Checks if the down button is pressed and the window is  already open*/
+	{
+		if ((rub_Idle_Time_Counter>=DEBOUNCED_TIME) && (BUTTON_DOWN_PRESSED==PRESSED)) /*Checks the debounce time has been met*/
 		{
-			if ((ruw_Idle_Time_Counter>=DEBOUNCED_TIME) && (BUTTON_DOWN_PRESSED==PRESSED)) /*Checks the debounce time has been met*/
-			{
-				lub_State = WINDOWAUTO_OPENING; /*Sets the state machine to window open*/
-					LED_ON (LED_GREEN);
-			}
-			else ruw_Idle_Time_Counter++; /*increments conter +1ms*/
+			lub_State_Id = WINDOWAUTO_OPENING; /*Sets the state machine to window open*/
+			LED_ON (LED_GREEN);
 		}
-		if ((BUTTON_UP_PRESSED==PRESSED ) &&(rsb_PositionLedbar<WINDOW_TOTALLY_CLOSED)) /*checks window is not totally closed and if the close button is pressed*/
+		else rub_Idle_Time_Counter++; /*increments conter +1ms*/
+	}
+	if ((BUTTON_UP_PRESSED==PRESSED ) &&(rsb_PositionLedbar<WINDOW_TOTALLY_CLOSED)) /*checks window is not totally closed and if the close button is pressed*/
+	{
+		if ((rub_Idle_Time_Counter>=DEBOUNCED_TIME) && (BUTTON_UP_PRESSED==PRESSED)) /*checks the button has been pressed more than the debounced time*/
 		{
-			if ((ruw_Idle_Time_Counter>=DEBOUNCED_TIME) && (BUTTON_UP_PRESSED==PRESSED)) /*checks the button has been pressed more than the debounced time*/
-			{
-				lub_State = WINDOWAUTO_CLOSING;
-				LED_ON (LED_BLUE);
-			}
-			else ruw_Idle_Time_Counter++;  /*Tim counter increments 1ms*/
+			lub_State_Id = WINDOWAUTO_CLOSING;
+			LED_ON (LED_BLUE);
 		}
-			
-			if ((BUTTON_DOWN_PRESSED==NO_PRESSED)&&(BUTTON_UP_PRESSED==NO_PRESSED))  /*Assures if no button is pressed, the state machines stays in IDLE*/
-			{
-			ruw_Idle_Time_Counter=TIME_COUNT_RESTART;
-			lub_State=IDLE;
-			}
-			else
-			{
-				/*do nothing*/
-			}
-	return lub_State;
+	else rub_Idle_Time_Counter++;  /*Tim counter increments 1ms*/
+	}		
+	if ((BUTTON_DOWN_PRESSED==NO_PRESSED)&&(BUTTON_UP_PRESSED==NO_PRESSED))  /*Assures if no button is pressed, the state machines stays in IDLE*/
+	{
+		rub_Idle_Time_Counter=TIME_COUNT_RESTART;
+		lub_State_Id=IDLE;
+	}
+	else
+	{
+		/*do nothing*/
+	}
+	return lub_State_Id;
 }
 
 /**************************************************************
  *  Name                 :	anti_pinch
  *  Description          :  function that controls the anti pinch button 
  *  Parameters           :  none
- *  Return               :  none
+ *  Return               :  lub_State_AP
  *  Critical/explanation :  no
  **************************************************************/
  
 T_UBYTE Anti_Pinch(void)
 {
-	T_UBYTE lub_state=ANTI_PINCH;
-	T_UWORD luw_time_counter_AP=Reed_Ms_Counter();
- 	T_SBYTE lsb_PositionLedbar_AP=Reed_PositionLedbar();
+	T_UBYTE lub_State_AP=ANTI_PINCH;
+	T_UWORD luw_Time_Counter_AP=Reed_Ms_Counter(); /* Reeds the value of the counter */
+ 	T_SBYTE lsb_PositionLedbar_AP=Reed_PositionLedbar(); /* Reeds the value of the position led bar */
 	rub_CounterOnOff_Flag=ON; /* Activate the counter */
 	if(ruw_Open_Flag == DEACTIVATED) /* checks the flag that is activated when the window is completly open */
 	{
 		LED_OFF(LED_BLUE);
 		LED_ON(LED_GREEN);
-		if(luw_time_counter_AP == T_400ms) /* checks that the time of the counter is 400ms or over */
+		if(luw_Time_Counter_AP == T_400ms) /* checks that the time of the counter is 400ms or over */
 		{
 			Window_LedBar_Open(lsb_PositionLedbar_AP); /* sends the position of the ledbar to turn off a led*/
 			ruw_time_counter=T_0ms;    /*restart the counter */
@@ -200,7 +198,7 @@ T_UBYTE Anti_Pinch(void)
 		if(lsb_PositionLedbar_AP <= BarLed_UnderFlow) /* checks when the window is completely open */
 		{
 			ruw_Open_Flag = ACTIVATED; /* activate the flag that indicates that the window is now open */
-			rsb_PositionLedbar=OPEN;
+			rsb_PositionLedbar=OPEN; 
 			LED_OFF(LED_GREEN);
 		}
 		else
@@ -212,17 +210,16 @@ T_UBYTE Anti_Pinch(void)
 	{
 		/* Do nothing */
 	}
-	if(luw_time_counter_AP >= T_5s) /* waits 5 seconds of the counter to send the program to idle  */
+	if(luw_Time_Counter_AP >= T_5s) /* waits 5 seconds of the counter to send the program to idle  */
 	{
-		lub_state=	IDLE;
+		lub_State_AP=	IDLE;
 		rub_CounterOnOff_Flag=OFF;
 		ruw_time_counter=T_0ms;
-		ruw_Open_Flag = DEACTIVATED;
-		
+		ruw_Open_Flag = DEACTIVATED;		
 	}
 	else
 	{
 		/* Do nothing */
 	}
-	return lub_state;
+	return lub_State_AP;
 }
