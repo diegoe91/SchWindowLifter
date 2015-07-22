@@ -136,7 +136,7 @@ void SchM_Task_3p125ms(void)
 
 void SchM_Task_6p25ms(void)
 {
-	LED_TOGGLE(LED1);
+	
 }
 
 /**************************************************************
@@ -150,7 +150,7 @@ void SchM_Task_6p25ms(void)
 
 void SchM_Task_12p5ms(void)
 {
-	LED_TOGGLE(LED4);
+
 }
 
 /**************************************************************
@@ -164,7 +164,7 @@ void SchM_Task_12p5ms(void)
 
 void SchM_Task_25ms(void)
 {
-	LED_TOGGLE(LED3);
+
 }
 
 /**************************************************************
@@ -178,7 +178,7 @@ void SchM_Task_25ms(void)
 
 void SchM_Task_50ms(void)
 {
-	LED_TOGGLE(LED2);
+
 }
 
 /**************************************************************

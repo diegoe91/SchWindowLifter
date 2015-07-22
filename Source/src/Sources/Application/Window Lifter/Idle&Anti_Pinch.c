@@ -138,7 +138,7 @@ T_UBYTE Idle_Func ()
 	LED_OFF (LED_GREEN);
 	LED_OFF (LED_BLUE);
 	ruw_Pace_Counter=PACE_TIME_REQUIRED;/*Overpasses the pace time counter to ensure the first led is turn on/off on time (0ms)*/
-	if ((BUTTON_DOWN_PRESSED==PRESSED ) &&(rsb_PositionLedbar>WINDOW_TOTALLY_OPEN)) /*Checks if the down button is pressed and the window is  already open*/
+	if ((BUTTON_DOWN_PRESSED==PRESSED ) &&(rsb_PositionLedbar>=WINDOW_TOTALLY_OPEN)) /*Checks if the down button is pressed and the window is  already open*/
 	{
 		if ((rub_Idle_Time_Counter>=DEBOUNCED_TIME) && (BUTTON_DOWN_PRESSED==PRESSED)) /*Checks the debounce time has been met*/
 		{
@@ -147,7 +147,7 @@ T_UBYTE Idle_Func ()
 		}
 		else rub_Idle_Time_Counter++; /*increments conter +1ms*/
 	}
-	if ((BUTTON_UP_PRESSED==PRESSED ) &&(rsb_PositionLedbar<WINDOW_TOTALLY_CLOSED)) /*checks window is not totally closed and if the close button is pressed*/
+	if ((BUTTON_UP_PRESSED==PRESSED ) &&(rsb_PositionLedbar<=WINDOW_TOTALLY_CLOSED)) /*checks window is not totally closed and if the close button is pressed*/
 	{
 		if ((rub_Idle_Time_Counter>=DEBOUNCED_TIME) && (BUTTON_UP_PRESSED==PRESSED)) /*checks the button has been pressed more than the debounced time*/
 		{

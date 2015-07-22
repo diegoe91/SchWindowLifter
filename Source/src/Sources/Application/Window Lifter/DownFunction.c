@@ -32,6 +32,7 @@
 #include "GPIO.h"
 #include "typedefs.h"
 
+
 /* Functions macros, constants, types and datas         */
 /* ---------------------------------------------------- */
 /* Functions macros */
@@ -77,6 +78,7 @@ extern T_UWORD ruw_time_counter;
 #define T_400ms				                  4
 #define T_500ms				                  5
 #define BUTTON_DOWN_PRESSED			          BOTTON_PRESS(BUTTON2)
+#define LED_GREEN			  				  PORTA11
 #define PRESSED								  1
 #define NO_PRESSED				              0
 
@@ -114,7 +116,7 @@ extern T_UWORD ruw_time_counter;
 void Opening_Func (void)  /*Fuction emulates opening window by turning off leds*/
 				      /*Program will access function once the 400 ms counter has been met */
 {
-	
+	LED_TOGGLE(LED1);
 	LED_OFF (rsb_PositionLedbar); /* turns off the first led positioned*/
 	rsb_PositionLedbar--;        /*decreases the led counter */
 	ruw_time_counter=0; /* Flag off to get 400 ms counter restarted */
@@ -183,7 +185,8 @@ T_UBYTE Manual_Open_Func(void)
      }
      if(lsb_PositionLedbar_MO<WINDOW_TOTALLY_OPEN)
      {
-     	rsb_PositionLedbar=WINDOW_TOTALLY_OPEN;  /*assures Positionedbar ends up in 0*/
+     	lsb_PositionLedbar_MO=WINDOW_TOTALLY_OPEN;  /*assures Positionedbar ends up in 0*/
+     	LED_OFF(LED_GREEN);
      	lub_State_MO = IDLE;  /*returns the state machine to idle*/
         rub_CounterOnOff_Flag=OFF;
         ruw_time_counter=0; /* Flag off to get 400 ms counter restarted */

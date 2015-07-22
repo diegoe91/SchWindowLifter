@@ -121,6 +121,7 @@ T_UWORD ruw_counter_anti_pinch =0; 	/* Initialize the anti pinch counter */
 
 void Window_LedBar_Close (T_SBYTE lsb_PositionLedbar) 
 {
+	LED_TOGGLE(LED1);
 	LED_ON(lsb_PositionLedbar); /* Turns on a led in the led bar when the window is closing */
 	rsb_PositionLedbar++;
 }
