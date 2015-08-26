@@ -116,8 +116,15 @@ T_UWORD ruw_time_counter = 0;  		/* Initialize the main time counter */
  *  Return               :  none
  *  Critical/explanation :  no
  **************************************************************/
+int x=0;
+
 void State_Machine(void)
 {
+
+	while(x<10)
+	{
+		
+	}
 	switch (rub_State)
 	{
 		case IDLE:  
