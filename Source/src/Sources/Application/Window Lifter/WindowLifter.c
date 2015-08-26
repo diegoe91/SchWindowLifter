@@ -118,6 +118,11 @@ T_UWORD ruw_time_counter = 0;  		/* Initialize the main time counter */
  **************************************************************/
 void State_Machine(void)
 {
+int y;
+for(y=0; y<5; y++)
+{
+	
+}
 	switch (rub_State)
 	{
 		case IDLE:  
